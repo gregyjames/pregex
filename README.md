@@ -1,3 +1,8 @@
+[![.NET](https://github.com/gregyjames/pregex/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/gregyjames/pregex/actions/workflows/dotnet.yml)
+[![NuGet latest version](https://badgen.net/nuget/v/Pregex)](https://www.nuget.org/packages/Pregex)
+![NuGet Downloads](https://img.shields.io/nuget/dt/Pregex)
+[![codecov](https://codecov.io/github/gregyjames/pregex/branch/main/graph/badge.svg?token=95UjrQ1tDl)](https://codecov.io/github/gregyjames/pregex)
+
 # Pregex - Pretty RegEx!
 
 A fluent, chainable API for building regular expressions in C# that's easy to read, write, and maintain.
