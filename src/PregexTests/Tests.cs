@@ -618,6 +618,75 @@ public class Tests
 
     #region Pattern Building Tests
     [Test]
+    public void TestGetOptions()
+    {
+        var builder = RegexBuilder.Create()
+            .Digit().OneOrMore()
+            .IgnoreCase()
+            .Multiline();
+        
+        var options = builder.GetOptions();
+        Assert.IsTrue(options.HasFlag(RegexOptions.IgnoreCase));
+        Assert.IsTrue(options.HasFlag(RegexOptions.Multiline));
+    }
+
+    [Test]
+    public void TestGetOptionsNoFlags()
+    {
+        var builder = RegexBuilder.Create()
+            .Digit().OneOrMore();
+        
+        var options = builder.GetOptions();
+        Assert.AreEqual(RegexOptions.None, options);
+    }
+    
+    [Test]
+    public void TestGetOptionsMultipleFlags()
+    {
+        var builder = RegexBuilder.Create()
+            .Word().OneOrMore()
+            .IgnoreCase()
+            .Multiline()
+            .Compiled()
+            .Singleline();
+        
+        var options = builder.GetOptions();
+        Assert.IsTrue(options.HasFlag(RegexOptions.IgnoreCase));
+        Assert.IsTrue(options.HasFlag(RegexOptions.Multiline));
+        Assert.IsTrue(options.HasFlag(RegexOptions.Compiled));
+        Assert.IsTrue(options.HasFlag(RegexOptions.Singleline));
+    }
+
+    [Test]
+    public void TestToString()
+    {
+        var builder = RegexBuilder.Create()
+            .StartOfString()
+            .Digit().OneOrMore()
+            .EndOfString();
+        
+        var result = builder.ToString();
+        Assert.IsTrue(result.StartsWith("/"));
+        Assert.IsTrue(result.Contains(@"^\d+$"));
+        Assert.IsTrue(result.EndsWith("/None"));
+    }
+
+    [Test]
+    public void TestToStringWithOptions()
+    {
+        var builder = RegexBuilder.Create()
+            .Word().OneOrMore()
+            .IgnoreCase()
+            .Multiline();
+        
+        var result = builder.ToString();
+        Assert.IsTrue(result.StartsWith("/"));
+        Assert.IsTrue(result.Contains(@"\w+"));
+        Assert.IsTrue(result.Contains("IgnoreCase"));
+        Assert.IsTrue(result.Contains("Multiline"));
+    }
+    
+    [Test]
     public void TestGetPattern()
     {
         var builder = RegexBuilder.Create()
