@@ -565,6 +565,55 @@ public class Tests
             .Build();
         Assert.IsTrue(regex.IsMatch("test\nmore"));
     }
+    
+    [Test]
+    public void TestExplicitCapture()
+    {
+        var regex = RegexBuilder.Create()
+            .Group(b => b.Digit().Exactly(3))           // Unnamed group - won't capture
+            .Literal("-")
+            .NamedGroup("last", b => b.Digit().Exactly(4))  // Named group - will capture
+            .ExplicitCapture()
+            .Build();
+        
+        var match = regex.Match("123-4567");
+        Assert.IsTrue(match.Success);
+        
+        Assert.AreEqual("4567", match.Groups["last"].Value);
+        
+        Assert.AreEqual(2, match.Groups.Count);
+    }
+
+    [Test]
+    public void TestCompiled()
+    {
+        var regex = RegexBuilder.Create()
+            .Digit().OneOrMore()
+            .Compiled()
+            .Build();
+        
+        // Test that it works and has the Compiled option
+        Assert.IsTrue(regex.IsMatch("12345"));
+        Assert.IsTrue(regex.Options.HasFlag(RegexOptions.Compiled));
+    }
+
+    [Test]
+    public void TestIgnorePatternWhitespace()
+    {
+        var builder = RegexBuilder.Create()
+            .Digit().Exactly(3)
+            .Literal("-")
+            .Digit().Exactly(4)
+            .IgnorePatternWhitespace();
+        
+        var regex = builder.Build();
+        
+        // Verify the option is set
+        Assert.IsTrue(regex.Options.HasFlag(RegexOptions.IgnorePatternWhitespace));
+        
+        // Pattern should still work normally
+        Assert.IsTrue(regex.IsMatch("123-4567"));
+    }
     #endregion
 
     #region Pattern Building Tests
